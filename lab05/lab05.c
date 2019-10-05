@@ -3,7 +3,7 @@
 
 #include "lista.h"
 
-void allocate(p_no list, int size) {
+/* void allocate(p_no list, int size) {
 	p_no head = list->next;
 	p_no first = head->next;
 	
@@ -95,32 +95,14 @@ void disallocate(p_no list, int initial_position, int size) {
 		actual->used = 0;
 		actual = actual->next;
 	}
-}
+}*/
 
 void print_list(p_no list) {
 	p_no head = list->next;
 	p_no first = head->next;
 	
-	int counter = 0;
-	int position = 0;
-	
-	int savedPosition = 0;
-	
 	for (p_no actual = first; actual != head; actual = actual->next) {
-		if (actual->used == 0) {
-			counter = counter + 1;
-		} else {
-			if (counter > 0) {
-				printf("\n%d %d", savedPosition, counter);
-				counter = 0;
-			}
-			savedPosition = position + 1;
-		}
-		position = position + 1;
-	}
-	
-	if (counter > 0) {
-		printf("\n%d %d", savedPosition, counter);
+		printf("\n%d %d", actual->initialPosition, actual->freeSpace);
 	}
 }
 
@@ -131,15 +113,15 @@ int main() {
 	p_no list;
 	scanf("%d %d", &m, &n);
 
-	list = create_list();
-	
+	list = create_list(n);
+	/*
 	for (int i = 1; i <= n - 1; i++) {
 		list = add_no(list);
 	}
 	//p_no head = list->next;
 	//p_no first = head->next;
 
-	/*for (p_no actual = first; actual != head; actual = actual->next) {
+	for (p_no actual = first; actual != head; actual = actual->next) {
 		printf("%d\n", actual->used);
 	}*/
 	int firstPrint = 1;	
@@ -150,23 +132,23 @@ int main() {
 		if (option == 'A') {
 			int size;
 			scanf("%d", &size);
-			allocate(list, size);
+			//allocate(list, size);
 		} else if (option == 'D') {
 			int initial_position, size;
 			scanf("%d", &initial_position);			
 			scanf("%d", &size);
-			disallocate(list, initial_position, size);
+			//disallocate(list, initial_position, size);
 		} else if (option == 'R') {
 			int initial_position, size_before, size_after;
 			scanf("%d", &initial_position);			
 			scanf("%d", &size_before);
 			scanf("%d", &size_after);
-			disallocate(list, initial_position, size_before);
-			if (haveEnoughSpace(list, size_after, initial_position)) {
-				allocateAtPosition(list, size_after, initial_position);			
-			} else {
-				allocate(list, size_after);
-			}
+			//disallocate(list, initial_position, size_before);
+			//if (haveEnoughSpace(list, size_after, initial_position)) {
+			//	allocateAtPosition(list, size_after, initial_position);			
+			//} else {
+			//	allocate(list, size_after);
+			//}
 		} else if (option == 'P') {
 			if (!firstPrint) {
 				printf("\nheap:");
