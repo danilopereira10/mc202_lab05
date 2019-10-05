@@ -4,7 +4,8 @@
 typedef struct No {
 	struct No *next;
 	struct No *prev;
-	int used;
+	int initialPosition;
+	int freeSpace;
 } No;
 
 typedef struct No * p_no;
