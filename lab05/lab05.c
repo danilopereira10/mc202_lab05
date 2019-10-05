@@ -83,19 +83,37 @@
 			actual = actual->next;
 		}
 	}
-
-	void disallocate(p_no list, int initial_position, int size) {
+*/
+	p_no disallocate(p_no list, int initial_position, int size) {
+		p_no newNo = malloc(sizeof(p_no));
 		p_no head = list->next;
-		p_no first = head->next;
-		p_no actual = first;
-		for (int i = 1; i <= initial_position; i++) {
-			actual = actual->next;
+		newNo->initialPosition = initial_position;
+		newNo->freeSpace = size;
+		if (list == head) { //add newNo to the end of the list
+			newNo->next = head;
+			newNo->prev = list;
+			list->next = newNo;
+			head->prev = newNo;
+			list = newNo;
+		} else {
+			for (p_no actual = head->next; actual != head; actual = actual->next) {
+				if (newNo->initialPosition < actual->initialPosition) {
+					//add new before actual node
+					newNo->next = actual;
+					newNo->prev = actual->prev;
+					actual->prev->next = newNo;
+					actual->prev = newNo;
+				} else if (actual->next == head) {
+					newNo->next = head;
+					newNo->prev = list;
+					list->next = newNo;
+					head->prev = newNo;
+					list = newNo;
+				}
+			}
 		}
-		for (int i = 1; i <= size; i++) {
-			actual->used = 0;
-			actual = actual->next;
-		}
-	}*/
+		return list;	
+	}
 
 	p_no allocate(p_no list, int size) {
 		if (size == 0) { //do nothing
@@ -176,7 +194,7 @@
 				int initial_position, size;
 				scanf("%d", &initial_position);			
 				scanf("%d", &size);
-				//disallocate(list, initial_position, size);
+				list = disallocate(list, initial_position, size);
 			} else if (option == 'R') {
 				int initial_position, size_before, size_after;
 				scanf("%d", &initial_position);			
