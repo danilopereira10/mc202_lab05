@@ -97,9 +97,9 @@
 		}
 	}*/
 
-	void allocate(p_no list, int size) {
+	p_no allocate(p_no list, int size) {
 		if (size == 0) { //do nothing
-			return;
+			return list;
 		}
 		
 		p_no head = list->next;
@@ -124,7 +124,14 @@
 			//allocate effectively
 			choosenPosition->freeSpace = choosenPosition->freeSpace - size;
 			choosenPosition->initialPosition = choosenPosition->initialPosition + size;
+			if (choosenPosition->freeSpace == 0) {
+				choosenPosition->prev->next = choosenPosition->next;
+				choosenPosition->next->prev = choosenPosition->prev;
+				free(choosenPosition);
+				list = head->prev; //go to the last item of the list;
+			}
 		}
+		return list;
 	}
 
 	void print_list(p_no list) {
@@ -164,7 +171,7 @@
 			if (option == 'A') {
 				int size;
 				scanf("%d", &size);
-				allocate(list, size);
+				list = allocate(list, size);
 			} else if (option == 'D') {
 				int initial_position, size;
 				scanf("%d", &initial_position);			
