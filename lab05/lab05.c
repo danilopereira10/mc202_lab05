@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+	#include <stdio.h>
+	#include <stdlib.h>
 
-#include "lista.h"
+	#include "lista.h"
 
 void print_list(p_no list) {
 	p_no head = list->next;
@@ -80,6 +80,7 @@ p_no disallocate(p_no list, int initial_position, int size) {
 				return list;
 			}
 		}
+		return 1;
 	}
 	return list;	
 }
@@ -201,9 +202,8 @@ int main() {
 				firstPrint = 0;
 			}
 		}
-	}
-	
-	printf("\n");
+		
+		printf("\n");
 
-	return EXIT_SUCCESS;
-}
+		return EXIT_SUCCESS;
+	}
