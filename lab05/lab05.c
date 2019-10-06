@@ -3,87 +3,6 @@
 
 	#include "lista.h"
 
-	/* void allocate(p_no list, int size) {
-		p_no head = list->next;
-		p_no first = head->next;
-		
-		int position = 0;
-		int counter = 0;
-		int savedPosition = 0;
-		
-		int savedPositionWithHigherCounter = 0;
-		int savedCounter = 0;
-
-		for (p_no actual = first; actual != head; actual = actual->next) {		
-			if (actual->used == 0) {
-				counter = counter + 1;
-			} else {
-				if (counter >= size) {
-					if (savedCounter > size && counter < savedCounter) {
-						savedPositionWithHigherCounter = savedPosition;
-						savedCounter = counter;
-					} else if (savedCounter < size) {
-						savedPositionWithHigherCounter = savedPosition;
-						savedCounter = counter;
-					}
-				}
-				savedPosition = position + 1;
-				counter = 0;
-			}
-			
-			position = position + 1;
-		}
-		
-		if (counter >= size) {
-					if (savedCounter > size && counter < savedCounter) {
-						savedCounter = counter;
-					} else if (savedCounter < size) {
-						savedPositionWithHigherCounter = savedPosition;
-						savedCounter = counter;
-					}
-				}
-		
-		if (savedCounter >= size) {
-			p_no actual = first;
-			for (int i = 1; i <= savedPositionWithHigherCounter; i++) {
-				actual = actual->next;
-			}
-			for (int i = 1; i <= size; i++) {
-				actual->used=1;
-				actual = actual->next;
-			}
-		}
-	}
-
-	int haveEnoughSpace(p_no list, int size, int position) {
-		p_no head = list->next;
-		p_no first = head->next;
-		p_no actual = first;
-		for (int i = 1; i <= position; i++) {
-			actual = actual->next;
-		}
-		for (int i = 1; i <= size; i++) {
-			if (actual->used == 1 || actual->used == -1) {
-				return 0;		
-			}
-			actual = actual->next;
-		}
-		return 1;
-	}
-
-	void allocateAtPosition(p_no list, int size, int position) {
-		p_no head = list->next;
-		p_no first = head->next;
-		p_no actual = first;
-		for (int i = 1; i <= position; i++) {
-			actual = actual->next;
-		}
-		for (int i = 1; i <= size; i++) {
-			actual->used=1;
-			actual = actual->next;
-		}
-	}
-*/
 	p_no disallocate(p_no list, int initial_position, int size) {
 		p_no newNo = malloc(sizeof(p_no));
 		p_no head = list->next;
@@ -98,17 +17,40 @@
 		} else {
 			for (p_no actual = head->next; actual != head; actual = actual->next) {
 				if (newNo->initialPosition < actual->initialPosition) {
-					//add new before actual node
+					//add new node before actual node
 					newNo->next = actual;
 					newNo->prev = actual->prev;
 					actual->prev->next = newNo;
 					actual->prev = newNo;
+					if (newNo->initialPosition + newNo->freeSpace == actual->initialPosition) {
+						newNo->freeSpace = newNo->freeSpace + actual->freeSpace;
+						newNo->next = actual->next;
+						actual->next->prev = actual->prev;
+						if (list == actual) {
+							list = newNo;
+						}
+						free(actual);
+						
+					}
+					return list;
 				} else if (actual->next == head) {
+					//add new node after actual node
 					newNo->next = head;
 					newNo->prev = list;
 					list->next = newNo;
 					head->prev = newNo;
 					list = newNo;
+					if (actual->initialPosition + actual->freeSpace == newNo->initialPosition) {
+						actual->freeSpace = actual->freeSpace + newNo->freeSpace;
+						actual->next = newNo->next;
+						newNo->next->prev = newNo->prev;
+						if (list == newNo) {
+							list = actual;
+						}
+						free(newNo);
+						
+					}
+					return list;
 				}
 			}
 		}
