@@ -16,14 +16,3 @@ p_no create_list(int newSpace) {
 	newList->initialPosition = 0;
 	return newList;
 }
-
-/*p_no add_no(p_no list) {
-	
-	p_no newNo = malloc(sizeof(p_no));
-	newNo->next = list->next;
-	newNo->prev = list;
-	newNo->used = 0;
-	list->next = newNo;
-	return newNo;
-	
-}*/
